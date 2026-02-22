@@ -17,7 +17,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-slate-950 text-slate-300 pt-24 pb-12 px-6 border-t border-white/5 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-green-500/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Cambiamos items-center en móvil para centrar las columnas */}
@@ -119,7 +119,7 @@ export default function Footer() {
           </div>
 
           {/* COLUMNA 4: CONTACTO */}
-          <div className="bg-white/5 p-8 rounded-[2rem] border border-white/10 w-full flex flex-col items-center md:items-start text-center md:text-left">
+          <div className="bg-white/5 p-8 rounded-4xl border border-white/10 w-full flex flex-col items-center md:items-start text-center md:text-left">
             <h4 className="text-white font-black mb-6 uppercase tracking-[0.2em] text-xs italic">
               Sede Central
             </h4>

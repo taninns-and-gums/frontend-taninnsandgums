@@ -56,7 +56,7 @@ export function ProductionProcess() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false }}
                 transition={{ delay: i * 0.2 }}
-                className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-shadow"
+                className="bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-shadow"
               >
                 <div className="w-16 h-16 bg-green-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-200">
                   {step.icon}

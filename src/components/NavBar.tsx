@@ -11,6 +11,7 @@ import {
   Leaf,
   Zap,
   Home,
+  Check,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,6 +19,8 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [language, setLanguage] = useState("ES");
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,9 +51,11 @@ export default function Navbar() {
     },
   ];
 
+  const languages = ["ES", "EN"];
+
   return (
     <nav
-      className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
+      className={`fixed top-0 w-full z-100 transition-all duration-500 ${
         isScrolled
           ? "py-4 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl"
           : "py-8 bg-transparent"
@@ -137,9 +142,45 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-6 border-l border-white/10 pl-10">
-            <button className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-green-400 transition-colors uppercase tracking-widest">
-              <Globe size={14} /> EN
-            </button>
+            {/* SELECTOR DE IDIOMA DESKTOP */}
+            <div
+              className="relative"
+              onMouseEnter={() => setIsLangDropdownOpen(true)}
+              onMouseLeave={() => setIsLangDropdownOpen(false)}
+            >
+              <button className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-green-400 transition-colors uppercase tracking-widest">
+                <Globe size={14} /> {language} <ChevronDown size={10} />
+              </button>
+
+              <AnimatePresence>
+                {isLangDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="absolute top-full right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+                  >
+                    {languages.map((lang) => (
+                      <button
+                        key={lang}
+                        onClick={() => {
+                          setLanguage(lang);
+                          setIsLangDropdownOpen(false);
+                        }}
+                        className={`flex items-center justify-between w-20 px-4 py-2 text-[10px] font-bold transition-colors ${
+                          language === lang
+                            ? "bg-green-600 text-white"
+                            : "text-slate-400 hover:bg-white/5"
+                        }`}
+                      >
+                        {lang} {language === lang && <Check size={10} />}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link
               href="/contacto"
               className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 ${
@@ -155,10 +196,10 @@ export default function Navbar() {
 
         {/* BOTÓN HAMBURGUESA MÓVIL */}
         <button
-          className="md:hidden text-white"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden text-white p-2"
+          onClick={() => setMobileMenuOpen(true)}
         >
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          <Menu size={28} />
         </button>
       </div>
 
@@ -169,50 +210,99 @@ export default function Navbar() {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            className="fixed inset-0 h-screen bg-slate-950 z-[90] flex flex-col p-10 md:hidden"
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 h-screen bg-slate-950 z-150 flex flex-col md:hidden"
           >
-            <div className="mt-20 space-y-8">
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                Navegación
-              </p>
-
-              {/* Link de Inicio en móvil */}
-              <Link
-                href="/"
+            {/* CABECERA MENÚ MÓVIL CON BOTÓN DE CIERRE */}
+            <div className="flex items-center justify-between p-6 border-b border-white/5">
+              <div className="flex flex-col">
+                <span className="text-xl font-black text-white">TANNINS</span>
+                <span className="text-[8px] font-bold tracking-[0.3em] text-green-500">
+                  & GUMS
+                </span>
+              </div>
+              <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 text-2xl font-black text-white"
+                className="p-2 bg-white/5 rounded-full text-white hover:bg-white/10 transition-colors"
               >
-                <Home size={24} className="text-slate-400" /> Inicio
-              </Link>
+                <X size={28} />
+              </button>
+            </div>
 
-              {productLinks.map((prod) => (
+            <div className="grow overflow-y-auto p-10 space-y-10">
+              <div className="space-y-6">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                  Navegación Principal
+                </p>
+
                 <Link
-                  key={prod.name}
-                  href={prod.href}
+                  href="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-2xl font-black text-white"
+                  className="flex items-center gap-4 text-3xl font-black text-white italic uppercase tracking-tighter"
                 >
-                  <span className={prod.color}>{prod.icon}</span> {prod.name}
+                  <Home size={24} className="text-slate-400" /> Inicio
                 </Link>
-              ))}
 
-              <hr className="border-white/10" />
+                {productLinks.map((prod) => (
+                  <Link
+                    key={prod.name}
+                    href={prod.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 text-3xl font-black text-white italic uppercase tracking-tighter"
+                  >
+                    <span className={prod.color}>{prod.icon}</span> {prod.name}
+                  </Link>
+                ))}
+              </div>
 
-              <Link
-                href="/nosotros"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-2xl font-black text-white"
-              >
-                Nosotros
-              </Link>
+              <hr className="border-white/5" />
 
-              <Link
-                href="/contacto"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-2xl font-black text-green-500"
-              >
-                Cotizar ahora
-              </Link>
+              <div className="space-y-6">
+                <Link
+                  href="/nosotros"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-3xl font-black text-white italic uppercase tracking-tighter"
+                >
+                  Nosotros
+                </Link>
+
+                <Link
+                  href="/contacto"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-3xl font-black text-green-500 italic uppercase tracking-tighter underline underline-offset-8"
+                >
+                  Cotizar ahora
+                </Link>
+              </div>
+
+              {/* SELECTOR DE IDIOMA MÓVIL */}
+              <div className="pt-10 flex items-center gap-4">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                  Idioma:
+                </p>
+                <div className="flex gap-2">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setLanguage(lang)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                        language === lang
+                          ? "bg-green-600 text-white"
+                          : "bg-white/5 text-slate-400"
+                      }`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* FOOTER DEL MENÚ MÓVIL */}
+            <div className="p-10 border-t border-white/5 opacity-40">
+              <p className="text-[10px] font-medium text-white tracking-widest text-center">
+                © 2026 TANNINS & GUMS PERÚ
+              </p>
             </div>
           </motion.div>
         )}
