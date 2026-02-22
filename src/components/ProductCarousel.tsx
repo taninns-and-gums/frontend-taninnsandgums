@@ -134,7 +134,7 @@ export default function HomePage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
-            className={`absolute inset-0 bg-gradient-to-br ${currentProduct.gradient}`}
+            className={`absolute inset-0 bg-linear-to-br ${currentProduct.gradient}`}
           />
         </AnimatePresence>
 

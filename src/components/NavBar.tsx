@@ -149,7 +149,7 @@ export default function Navbar() {
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
               {/* MODIFICADO: Ahora el botón usa t?.productos */}
-              <button className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white transition-colors py-2 uppercase tracking-wider">
+              <button className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white transition-colors py-2 tracking-wider">
                 {t?.productos}{" "}
                 <ChevronDown
                   size={14}
