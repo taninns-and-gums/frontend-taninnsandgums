@@ -215,6 +215,85 @@ export default function ProductPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* 5. QUICK SELECTOR (NAVEGACIÓN DE PRODUCTOS) - CORREGIDO */}
+      <section className="py-24 bg-slate-100 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.h3
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: false }}
+            className="text-center text-sm font-black tracking-[0.4em] text-slate-600 uppercase mb-16"
+          >
+            Explorar otros derivados
+          </motion.h3>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {Object.values(productDetails).map((p: any) => {
+              const isCurrent = p.id === product.id;
+
+              return (
+                <Link
+                  key={p.id}
+                  href={`/productos/${p.id}`}
+                  className={isCurrent ? "pointer-events-none" : ""}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false }}
+                    // CORRECCIÓN: Usamos boxShadow en lugar de shadow
+                    whileHover={
+                      !isCurrent
+                        ? {
+                            y: -15,
+                            boxShadow:
+                              "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                          }
+                        : {}
+                    }
+                    className={`p-10 rounded-[3rem] bg-white border-2 transition-all flex flex-col items-center text-center h-full ${
+                      isCurrent
+                        ? "border-slate-900 opacity-50"
+                        : "border-transparent shadow-sm hover:border-slate-300"
+                    }`}
+                  >
+                    <div
+                      className={`mb-6 p-4 rounded-2xl bg-slate-100 ${p.textAccent}`}
+                    >
+                      {p.icon}
+                    </div>
+
+                    {/* Contraste Máximo: Texto casi negro sobre blanco */}
+                    <h4 className="text-2xl font-black uppercase italic mb-3 tracking-tighter text-slate-950">
+                      {p.name}
+                    </h4>
+
+                    {/* Texto secundario: slate-800 para legibilidad perfecta */}
+                    <p className="text-slate-800 text-sm font-bold mb-8 leading-snug">
+                      {p.tagline}
+                    </p>
+
+                    {!isCurrent && (
+                      <div
+                        className={`flex items-center gap-2 text-[11px] font-black uppercase tracking-widest ${p.textAccent} mt-auto`}
+                      >
+                        Ver Detalles <ChevronRight size={16} />
+                      </div>
+                    )}
+
+                    {isCurrent && (
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
+                        Producto Actual
+                      </span>
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
