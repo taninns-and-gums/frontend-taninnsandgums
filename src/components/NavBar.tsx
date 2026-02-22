@@ -14,12 +14,13 @@ import {
   Check,
 } from "lucide-react";
 import Link from "next/link";
+import { useLang } from "@/context/LanguageContext";
 
 export default function Navbar() {
+  const { lang, setLang } = useLang();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [language, setLanguage] = useState("ES");
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -32,26 +33,82 @@ export default function Navbar() {
 
   const productLinks = [
     {
-      name: "Goma de Tara",
+      name: {
+        es: "Goma de Tara",
+        en: "Tara Gum",
+        de: "Tarakernmehl",
+        zh: "塔拉胶",
+      },
       href: "/productos/goma-de-tara",
       icon: <Beaker size={16} />,
       color: "text-green-500",
     },
     {
-      name: "Polvo de Tara",
+      name: {
+        es: "Polvo de Tara",
+        en: "Tara Powder",
+        de: "Tarapulver",
+        zh: "塔拉粉",
+      },
       href: "/productos/polvo-de-tara",
       icon: <Leaf size={16} />,
       color: "text-amber-500",
     },
     {
-      name: "Germen de Tara",
+      name: {
+        es: "Germen de Tara",
+        en: "Tara Germ",
+        de: "Taramahl",
+        zh: "塔拉胚芽",
+      },
       href: "/productos/germen-de-tara",
       icon: <Zap size={16} />,
       color: "text-emerald-500",
     },
   ];
 
-  const languages = ["ES", "EN"];
+  const languages = [
+    { code: "es", label: "Español" },
+    { code: "en", label: "English" },
+    { code: "de", label: "Deutsch" },
+    { code: "zh", label: "中文" },
+  ];
+
+  // DICCIONARIO ACTUALIZADO: Se agregó 'productos' y 'nav' para evitar errores
+  const t = {
+    es: {
+      inicio: "Inicio",
+      nosotros: "Nosotros",
+      contacto: "Contacto",
+      cotizar: "Cotizar ahora",
+      productos: "Productos",
+      nav: "Navegación",
+    },
+    en: {
+      inicio: "Home",
+      nosotros: "About",
+      contacto: "Contact",
+      cotizar: "Quote now",
+      productos: "Products",
+      nav: "Navigation",
+    },
+    de: {
+      inicio: "Start",
+      nosotros: "Über uns",
+      contacto: "Kontakt",
+      cotizar: "Angebot anfordern",
+      productos: "Produkte",
+      nav: "Navigation",
+    },
+    zh: {
+      inicio: "首页",
+      nosotros: "关于我们",
+      contacto: "联系我们",
+      cotizar: "立即询价",
+      productos: "产品",
+      nav: "导航",
+    },
+  }[lang as "es" | "en" | "de" | "zh"];
 
   return (
     <nav
@@ -64,8 +121,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* LOGO */}
         <Link href="/" className="group flex flex-col">
-          <motion.span className="text-2xl font-black text-white leading-none tracking-tight">
-            TANNINS
+          <motion.span className="text-2xl font-black text-white leading-none tracking-tight uppercase">
+            Tannins
           </motion.span>
           <span
             className={`text-[10px] font-bold tracking-[0.4em] ${
@@ -83,20 +140,20 @@ export default function Navbar() {
               href="/"
               className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
             >
-              Inicio
+              {t?.inicio}
             </Link>
 
-            {/* DROPDOWN DE PRODUCTOS */}
             <div
               className="relative"
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <button className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white transition-colors py-2">
-                Productos{" "}
+              {/* MODIFICADO: Ahora el botón usa t?.productos */}
+              <button className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white transition-colors py-2 uppercase tracking-wider">
+                {t?.productos}{" "}
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-300 ${
+                  className={`transition-transform ${
                     isDropdownOpen ? "rotate-180" : ""
                   }`}
                 />
@@ -113,17 +170,17 @@ export default function Navbar() {
                     <div className="grid gap-2">
                       {productLinks.map((prod) => (
                         <Link
-                          key={prod.name}
+                          key={prod.href}
                           href={prod.href}
-                          className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all group"
+                          className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 group transition-all"
                         >
                           <div
                             className={`p-2 rounded-xl bg-white/5 ${prod.color} group-hover:scale-110 transition-transform`}
                           >
                             {prod.icon}
                           </div>
-                          <span className="text-sm font-bold text-slate-200 group-hover:text-white uppercase tracking-wider">
-                            {prod.name}
+                          <span className="text-sm font-bold text-slate-200 uppercase tracking-wider">
+                            {prod.name[lang as keyof typeof prod.name]}
                           </span>
                         </Link>
                       ))}
@@ -137,43 +194,49 @@ export default function Navbar() {
               href="/nosotros"
               className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
             >
-              Nosotros
+              {t?.nosotros}
             </Link>
           </div>
 
           <div className="flex items-center gap-6 border-l border-white/10 pl-10">
-            {/* SELECTOR DE IDIOMA DESKTOP */}
+            {/* SELECTOR DE IDIOMA */}
             <div
               className="relative"
               onMouseEnter={() => setIsLangDropdownOpen(true)}
-              onMouseLeave={() => setIsLangDropdownOpen(false)}
+              onMouseLeave={() =>
+                setTimeout(() => setIsLangDropdownOpen(false), 150)
+              }
             >
-              <button className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-green-400 transition-colors uppercase tracking-widest">
-                <Globe size={14} /> {language} <ChevronDown size={10} />
+              <button className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-green-400 transition-colors uppercase tracking-widest py-4">
+                <Globe size={14} /> {lang.toUpperCase()}{" "}
+                <ChevronDown
+                  size={10}
+                  className={isLangDropdownOpen ? "rotate-180" : ""}
+                />
               </button>
-
               <AnimatePresence>
                 {isLangDropdownOpen && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="absolute top-full right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+                    onMouseEnter={() => setIsLangDropdownOpen(true)}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-full right-0 w-32 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl p-1"
                   >
-                    {languages.map((lang) => (
+                    {languages.map((l) => (
                       <button
-                        key={lang}
+                        key={l.code}
                         onClick={() => {
-                          setLanguage(lang);
+                          setLang(l.code);
                           setIsLangDropdownOpen(false);
                         }}
-                        className={`flex items-center justify-between w-20 px-4 py-2 text-[10px] font-bold transition-colors ${
-                          language === lang
+                        className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-[10px] font-black transition-all ${
+                          lang === l.code
                             ? "bg-green-600 text-white"
                             : "text-slate-400 hover:bg-white/5"
                         }`}
                       >
-                        {lang} {language === lang && <Check size={10} />}
+                        {l.label} {lang === l.code && <Check size={10} />}
                       </button>
                     ))}
                   </motion.div>
@@ -183,18 +246,18 @@ export default function Navbar() {
 
             <Link
               href="/contacto"
-              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 ${
+              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
                 isScrolled
-                  ? "bg-green-600 text-white"
+                  ? "bg-green-600 text-white shadow-lg shadow-green-900/20"
                   : "bg-white/10 text-white backdrop-blur-md hover:bg-white hover:text-black"
               }`}
             >
-              COTIZAR
+              {t?.cotizar}
             </Link>
           </div>
         </div>
 
-        {/* BOTÓN HAMBURGUESA MÓVIL */}
+        {/* MENÚ MÓVIL (Trigger) */}
         <button
           className="md:hidden text-white p-2"
           onClick={() => setMobileMenuOpen(true)}
@@ -203,7 +266,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* MENÚ MÓVIL */}
+      {/* MENÚ MÓVIL (Estructura completa conservada) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -213,96 +276,97 @@ export default function Navbar() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 h-screen bg-slate-950 z-150 flex flex-col md:hidden"
           >
-            {/* CABECERA MENÚ MÓVIL CON BOTÓN DE CIERRE */}
             <div className="flex items-center justify-between p-6 border-b border-white/5">
               <div className="flex flex-col">
-                <span className="text-xl font-black text-white">TANNINS</span>
-                <span className="text-[8px] font-bold tracking-[0.3em] text-green-500">
+                <span className="text-xl font-black text-white leading-none uppercase tracking-tighter italic">
+                  Tannins
+                </span>
+                <span className="text-[8px] font-bold text-green-500 tracking-[0.3em]">
                   & GUMS
                 </span>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 bg-white/5 rounded-full text-white hover:bg-white/10 transition-colors"
+                className="p-2 bg-white/5 rounded-full text-white"
               >
                 <X size={28} />
               </button>
             </div>
 
-            <div className="grow overflow-y-auto p-10 space-y-10">
-              <div className="space-y-6">
+            <div className="grow overflow-y-auto p-10 flex flex-col gap-10">
+              <div className="space-y-4">
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                  Navegación Principal
+                  {t?.nav}
                 </p>
-
-                <Link
-                  href="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-3xl font-black text-white italic uppercase tracking-tighter"
-                >
-                  <Home size={24} className="text-slate-400" /> Inicio
-                </Link>
-
-                {productLinks.map((prod) => (
+                <div className="flex flex-col gap-6">
                   <Link
-                    key={prod.name}
-                    href={prod.href}
+                    href="/"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-4 text-3xl font-black text-white italic uppercase tracking-tighter"
+                    className="flex items-center gap-4 text-4xl font-black text-white italic uppercase tracking-tighter"
                   >
-                    <span className={prod.color}>{prod.icon}</span> {prod.name}
+                    <Home size={24} className="text-green-500" /> {t?.inicio}
                   </Link>
-                ))}
-              </div>
 
-              <hr className="border-white/5" />
+                  <Link
+                    href="/nosotros"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 text-4xl font-black text-white italic uppercase tracking-tighter"
+                  >
+                    <div className="w-6 h-6 rounded-full border-2 border-green-500" />
+                    {t?.nosotros}
+                  </Link>
+                </div>
+              </div>
 
               <div className="space-y-6">
-                <Link
-                  href="/nosotros"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-3xl font-black text-white italic uppercase tracking-tighter"
-                >
-                  Nosotros
-                </Link>
-
-                <Link
-                  href="/contacto"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-3xl font-black text-green-500 italic uppercase tracking-tighter underline underline-offset-8"
-                >
-                  Cotizar ahora
-                </Link>
+                {/* MODIFICADO: Título de sección dinámica en móvil */}
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                  {t?.productos}
+                </p>
+                <div className="grid gap-6">
+                  {productLinks.map((prod) => (
+                    <Link
+                      key={prod.href}
+                      href={prod.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-4 text-3xl font-black text-white italic uppercase tracking-tighter"
+                    >
+                      <span className={prod.color}>{prod.icon}</span>{" "}
+                      {prod.name[lang as keyof typeof prod.name]}
+                    </Link>
+                  ))}
+                </div>
               </div>
+
+              <Link
+                href="/contacto"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-3xl font-black text-green-500 italic uppercase tracking-tighter underline underline-offset-8"
+              >
+                {t?.cotizar}
+              </Link>
 
               {/* SELECTOR DE IDIOMA MÓVIL */}
-              <div className="pt-10 flex items-center gap-4">
+              <div className="mt-auto pt-10 flex flex-col gap-4 pb-10">
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                  Idioma:
+                  {lang === "es" ? "Idioma:" : "Language:"}
                 </p>
-                <div className="flex gap-2">
-                  {languages.map((lang) => (
+                <div className="flex flex-wrap gap-2">
+                  {languages.map((l) => (
                     <button
-                      key={lang}
-                      onClick={() => setLanguage(lang)}
+                      key={l.code}
+                      onClick={() => setLang(l.code)}
                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                        language === lang
+                        lang === l.code
                           ? "bg-green-600 text-white"
                           : "bg-white/5 text-slate-400"
                       }`}
                     >
-                      {lang}
+                      {l.label}
                     </button>
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* FOOTER DEL MENÚ MÓVIL */}
-            <div className="p-10 border-t border-white/5 opacity-40">
-              <p className="text-[10px] font-medium text-white tracking-widest text-center">
-                © 2026 TANNINS & GUMS PERÚ
-              </p>
             </div>
           </motion.div>
         )}

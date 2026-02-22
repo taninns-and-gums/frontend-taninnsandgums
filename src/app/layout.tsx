@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 export const metadata: Metadata = {
   title: "Tannins and Gums - Calidad y Sostenibilidad en Derivados de Tara",
@@ -17,11 +18,11 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className="antialiased font-sans">
-        <Navbar />
-        {/* El padding-top (pt-20) asegura que el contenido no quede oculto tras el menú fijo */}
-        {/* <div className="pt-20">{children}</div> */}
-        <div>{children}</div>
-        <Footer />
+        <LanguageProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );
