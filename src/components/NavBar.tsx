@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Menu, X, ChevronDown, Beaker, Leaf, Zap } from "lucide-react";
+import {
+  Globe,
+  Menu,
+  X,
+  ChevronDown,
+  Beaker,
+  Leaf,
+  Zap,
+  Home,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -54,7 +63,9 @@ export default function Navbar() {
             TANNINS
           </motion.span>
           <span
-            className={`text-[10px] font-bold tracking-[0.4em] ${isScrolled ? "text-green-500" : "text-green-400"}`}
+            className={`text-[10px] font-bold tracking-[0.4em] ${
+              isScrolled ? "text-green-500" : "text-green-400"
+            }`}
           >
             & GUMS
           </span>
@@ -80,7 +91,9 @@ export default function Navbar() {
                 Productos{" "}
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                  className={`transition-transform duration-300 ${
+                    isDropdownOpen ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
@@ -123,7 +136,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* IDIOMA Y CTA */}
           <div className="flex items-center gap-6 border-l border-white/10 pl-10">
             <button className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-green-400 transition-colors uppercase tracking-widest">
               <Globe size={14} /> EN
@@ -141,7 +153,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* MÓVIL */}
+        {/* BOTÓN HAMBURGUESA MÓVIL */}
         <button
           className="md:hidden text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -163,6 +175,16 @@ export default function Navbar() {
               <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
                 Navegación
               </p>
+
+              {/* Link de Inicio en móvil */}
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-4 text-2xl font-black text-white"
+              >
+                <Home size={24} className="text-slate-400" /> Inicio
+              </Link>
+
               {productLinks.map((prod) => (
                 <Link
                   key={prod.name}
@@ -173,15 +195,20 @@ export default function Navbar() {
                   <span className={prod.color}>{prod.icon}</span> {prod.name}
                 </Link>
               ))}
+
               <hr className="border-white/10" />
+
               <Link
                 href="/nosotros"
+                onClick={() => setMobileMenuOpen(false)}
                 className="block text-2xl font-black text-white"
               >
                 Nosotros
               </Link>
+
               <Link
                 href="/contacto"
+                onClick={() => setMobileMenuOpen(false)}
                 className="block text-2xl font-black text-green-500"
               >
                 Cotizar ahora

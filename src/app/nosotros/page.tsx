@@ -3,31 +3,23 @@
 import { TeamSection } from "@/components/TeamSection";
 import { TimelineSection } from "@/components/TimelineSection";
 import { motion } from "framer-motion";
-import {
-  Target,
-  Users,
-  Factory,
-  Award,
-  CheckCircle2,
-  Leaf,
-  Globe,
-} from "lucide-react";
+import { Target, Award, CheckCircle2, Leaf } from "lucide-react";
 
 const values = [
   {
     title: "Sostenibilidad",
     desc: "Preservamos la biodiversidad andina mediante cosechas responsables y comercio justo con comunidades locales.",
-    icon: <Leaf className="text-green-500" />,
+    icon: <Leaf className="text-green-500" size={32} />,
   },
   {
     title: "Innovación",
     desc: "Inversión constante en tecnología de molienda y separación para obtener derivados de pureza superior.",
-    icon: <Target className="text-green-500" />,
+    icon: <Target className="text-green-500" size={32} />,
   },
   {
     title: "Excelencia",
     desc: "Control riguroso de calidad en nuestro laboratorio de Lima para cumplir estándares internacionales.",
-    icon: <Award className="text-green-500" />,
+    icon: <Award className="text-green-500" size={32} />,
   },
 ];
 
@@ -38,7 +30,7 @@ export default function AboutPage() {
       <section className="relative h-[60vh] flex items-center justify-center bg-slate-950 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950 z-10" />
-          <div className="w-full h-full bg-[url('/images/tara-field.jpg')] bg-cover bg-center opacity-30 grayscale" />
+          <div className="w-full h-full bg-[url('/images/p2.webp')] bg-cover bg-center opacity-30 grayscale" />
         </div>
 
         <div className="relative z-20 text-center px-6">
@@ -60,7 +52,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 2. MISIÓN Y VISIÓN: Contraste y Dinamismo */}
+      {/* 2. MISIÓN Y VISIÓN: CON IMAGEN DE PLANTA ACTUALIZADA */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -95,22 +87,36 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
+          {/* CONTENEDOR DE IMAGEN DE PLANTA */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false }}
-            className="bg-slate-100 rounded-[3rem] aspect-square relative overflow-hidden flex items-center justify-center"
+            className="group relative bg-slate-100 rounded-[3rem] aspect-square overflow-hidden shadow-2xl"
           >
-            <div className="absolute inset-0 bg-green-600/10" />
-            <Factory size={120} className="text-slate-300 relative z-10" />
-            <div className="absolute bottom-10 left-10 text-slate-950 font-black uppercase text-xs tracking-widest border-l-4 border-green-600 pl-4">
-              Planta de Producción <br /> Lima - Perú
+            {/* Imagen Real de la Planta */}
+            <motion.img
+              src="/images/g3.webp"
+              alt="Planta de Producción Tannins and Gums Lima"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+
+            {/* Overlay Gradiente */}
+            <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent" />
+
+            {/* Etiqueta Flotante */}
+            <div className="absolute bottom-10 left-10 text-white font-black uppercase text-xs tracking-widest border-l-4 border-green-600 pl-4 z-20">
+              Planta de Producción <br />
+              <span className="text-green-500">Lima - Perú</span>
             </div>
+
+            {/* Brillo ambiental */}
+            <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </motion.div>
         </div>
       </section>
 
-      {/* 3. VALORES CORPORATIVOS: Repetición en Scroll */}
+      {/* 3. VALORES CORPORATIVOS */}
       <section className="py-24 bg-slate-950 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
@@ -152,52 +158,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* 4. CIFRAS GLOBALES (Minimalista) */}
-      {/* <section className="py-24 bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false }}
-            className="text-center md:text-left"
-          >
-            <h4 className="text-7xl font-black text-slate-950 italic">50+</h4>
-            <p className="text-green-600 font-black uppercase tracking-[0.3em] text-xs">
-              Destinos Internacionales
-            </p>
-          </motion.div>
-          <div className="w-px h-16 bg-slate-200 hidden md:block" />
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false }}
-            transition={{ delay: 0.1 }}
-            className="text-center md:text-left"
-          >
-            <h4 className="text-7xl font-black text-slate-950 italic">5k</h4>
-            <p className="text-green-600 font-black uppercase tracking-[0.3em] text-xs">
-              TM Producidas Anualmente
-            </p>
-          </motion.div>
-          <div className="w-px h-16 bg-slate-200 hidden md:block" />
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false }}
-            transition={{ delay: 0.2 }}
-            className="text-center md:text-left"
-          >
-            <h4 className="text-7xl font-black text-slate-950 italic">100%</h4>
-            <p className="text-green-600 font-black uppercase tracking-[0.3em] text-xs">
-              Pureza de Origen
-            </p>
-          </motion.div>
-        </div>
-      </section> */}
-
-      {/* 5. EQUIPO HUMANO: Personalización y Cercanía */}
-      {/* <TeamSection /> */}
 
       <TimelineSection />
     </main>

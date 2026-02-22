@@ -63,7 +63,7 @@ export default function Footer() {
               {[
                 { name: "Inicio", href: "/" },
                 { name: "Nuestra Historia", href: "/nosotros" },
-                { name: "Proceso Lima", href: "/nosotros#proceso" },
+                // { name: "Proceso Lima", href: "/nosotros#proceso" },
                 { name: "Contacto Global", href: "/contacto" },
               ].map((link) => (
                 <li key={link.name}>

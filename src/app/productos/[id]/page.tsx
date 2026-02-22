@@ -2,17 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FileText,
-  ShieldCheck,
-  Download,
-  Beaker,
-  Leaf,
-  Zap,
-  ChevronRight,
-  Globe,
-  CheckCircle2,
-} from "lucide-react";
+import { Download, Beaker, Leaf, Zap, ChevronRight, Globe } from "lucide-react";
 import Link from "next/link";
 
 // --- BASE DE DATOS DINÁMICA ---
@@ -23,6 +13,7 @@ const productDetails: any = {
     tagline: "Hidrocoloide de Alta Performance",
     description:
       "Espesante natural de etiqueta limpia (Clean Label), procesado para cumplir con los estándares de viscosidad más exigentes de la industria alimentaria internacional.",
+    image: "/images/goma.png",
     specs: [
       { l: "Viscosidad", v: "2,500 - 5,200 cps" },
       { l: "Pureza", v: "99.8%" },
@@ -45,6 +36,7 @@ const productDetails: any = {
     tagline: "Taninos Vegetales Sustentables",
     description:
       "Líder en el curtido de cueros de lujo. Ofrece una fijación excepcional y es 100% libre de metales pesados, ideal para la moda sostenible y automotriz.",
+    image: "/images/polvo.png",
     specs: [
       { l: "Taninos", v: "> 62%" },
       { l: "Humedad", v: "< 10%" },
@@ -67,6 +59,7 @@ const productDetails: any = {
     tagline: "Proteína Vegetal Concentrada",
     description:
       "Ingrediente premium para nutrición animal. Con alto contenido proteico, es la elección ideal para alimentos balanceados y Pet Food de alta gama.",
+    image: "/images/germen.png",
     specs: [
       { l: "Proteína", v: "43% - 47%" },
       { l: "Grasa", v: "6% - 8%" },
@@ -91,19 +84,17 @@ export default function ProductPage() {
 
   if (!product)
     return (
-      <div className="h-screen flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center font-bold">
         Producto no encontrado
       </div>
     );
 
   return (
     <main className="bg-white min-h-screen font-sans">
-      {/* 1. HERO SECTION: Impacto Visual y Legibilidad */}
-      <section className="relative h-[75vh] flex items-center overflow-hidden bg-slate-950">
+      {/* 1. HERO SECTION */}
+      <section className="relative min-h-[90vh] md:h-[75vh] flex items-center overflow-hidden bg-slate-950 pt-32 md:pt-0">
         <div className="absolute inset-0 z-0">
-          <div
-            className={`absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-10`}
-          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-transparent z-10" />
           <div
             className={`absolute inset-0 opacity-20 ${product.accent} blur-[120px]`}
           />
@@ -111,24 +102,26 @@ export default function ProductPage() {
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 w-full">
           <motion.div
-            initial={{ opacity: 0, x: -50, filter: "blur(10px)" }}
-            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             className="max-w-3xl"
           >
             <div
-              className={`inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/5 border border-white/10 ${product.textAccent} font-bold text-xs tracking-[0.3em] uppercase`}
+              className={`inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-xl bg-white/5 border border-white/10 ${product.textAccent} font-black text-[10px] md:text-xs tracking-[0.3em] uppercase backdrop-blur-md`}
             >
-              {product.icon} {product.tagline}
+              <span className="shrink-0 scale-75 md:scale-100">
+                {product.icon}
+              </span>
+              <span className="leading-none">{product.tagline}</span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-none italic uppercase tracking-tighter">
+            <h1 className="text-5xl md:text-8xl font-black text-white mb-6 md:mb-8 leading-none italic uppercase tracking-tighter">
               {product.name}
             </h1>
-            <p className="text-xl text-slate-300 leading-relaxed mb-10 font-light max-w-xl">
+            <p className="text-lg md:text-xl text-slate-300 leading-relaxed mb-10 font-light max-w-xl">
               {product.description}
             </p>
             <button
-              className={`${product.accent} text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-black/20 uppercase text-sm tracking-widest`}
+              className={`${product.accent} text-white w-full md:w-auto px-10 py-5 rounded-2xl font-black flex items-center justify-center gap-3 hover:scale-105 transition-all shadow-xl uppercase text-xs md:text-sm tracking-widest`}
             >
               <Download size={20} /> Ficha Técnica PDF
             </button>
@@ -136,145 +129,99 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* 2. ESPECIFICACIONES TÉCNICAS: Repetición en Scroll */}
+      {/* 2. ESPECIFICACIONES CON IMAGEN DINÁMICA */}
       <section className="py-24 px-6 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center border-b border-slate-100">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-8"
-        >
+        <div className="space-y-8">
           <h2 className="text-4xl font-black text-slate-900 leading-tight">
             Excelencia Analítica en cada{" "}
             <span className={product.textAccent}>Partícula</span>
           </h2>
-          <p className="text-slate-600 text-lg leading-relaxed italic border-l-4 border-slate-200 pl-6">
-            Certificamos cada lote en nuestro laboratorio de control de calidad
-            para asegurar que Tannins and Gums mantenga su liderazgo en el
-            mercado global.
-          </p>
           <div className="grid grid-cols-1 gap-4">
             {product.specs.map((s: any, i: number) => (
-              <motion.div
+              <div
                 key={i}
-                whileInView={{ x: [0, 15, 0] }}
-                viewport={{ once: false }}
-                className="flex justify-between items-center p-7 bg-slate-50 rounded-3xl border border-slate-100 group hover:bg-white hover:shadow-lg transition-all"
+                className="flex justify-between items-center p-7 bg-slate-50 rounded-3xl border border-slate-100 transition-all"
               >
                 <span className="text-slate-400 font-bold uppercase text-xs tracking-widest">
                   {s.l}
                 </span>
-                <span className="text-2xl font-black text-slate-900">
+                <span className="text-xl md:text-2xl font-black text-slate-900">
                   {s.v}
                 </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-          viewport={{ once: false }}
-          className="bg-slate-100 rounded-[4rem] aspect-square flex items-center justify-center relative overflow-hidden shadow-inner"
-        >
-          <div className={`absolute inset-0 opacity-10 ${product.accent}`} />
-          <div className="text-slate-300 font-black text-2xl uppercase tracking-[0.5em] rotate-90">
-            Industrial Grade
-          </div>
-        </motion.div>
-      </section>
-
-      {/* 3. APLICACIONES MULTISECTORIALES */}
-      <section className="py-24 bg-white px-6">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            className="mb-16 text-center"
-          >
-            <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter italic">
-              Aplicaciones{" "}
-              <span className={product.textAccent}>Específicas</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {product.applications.map((app: any, i: number) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="p-10 rounded-[2.5rem] border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-2xl transition-all"
-              >
-                <div
-                  className={`w-12 h-1.5 ${product.accent} mb-6 rounded-full`}
-                />
-                <h4 className="text-xl font-black mb-3 text-slate-900 uppercase tracking-tight">
-                  {app.sector}
-                </h4>
-                <p className="text-slate-500 text-sm leading-relaxed font-medium">
-                  {app.uso}
-                </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="bg-slate-100 rounded-[4rem] aspect-square flex items-center justify-center relative overflow-hidden shadow-inner hidden lg:flex"
+        >
+          <div className={`absolute inset-0 opacity-10 ${product.accent}`} />
+          <motion.img
+            src={product.image}
+            alt={product.name}
+            className="relative z-10 w-4/5 h-4/5 object-contain drop-shadow-2xl"
+          />
+        </motion.div>
       </section>
 
-      {/* 4. TRAZABILIDAD (ORIGEN PERÚ) */}
+      {/* 4. TRAZABILIDAD (IMAGEN FIJA AGREGADA) */}
       <section className="py-24 bg-slate-950 text-white overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-20">
-          <motion.div
-            className="md:w-1/2"
-            initial={{ x: -100, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-5xl font-black mb-8 leading-tight uppercase italic tracking-tighter">
-              Trazabilidad <br />
-              Total desde <br />
-              <span className="text-green-500 text-7xl">Lima, Perú</span>
+          <div className="md:w-1/2">
+            <h3 className="text-4xl md:text-5xl font-black mb-8 leading-tight uppercase italic tracking-tighter">
+              Trazabilidad Total desde <br />{" "}
+              <span className="text-green-500 text-6xl md:text-7xl">
+                Lima, Perú
+              </span>
             </h3>
             <p className="text-slate-400 text-lg leading-relaxed mb-10 font-light">
-              Cada kilogramo de producto cuenta con un registro completo de
-              origen, garantizando que la materia prima recolectada en los Andes
-              cumpla con los estándares globales.
+              Garantizamos que la materia prima recolectada en los Andes cumpla
+              con los estándares globales mediante registros de origen
+              completos.
             </p>
             <div className="flex gap-10">
               <div className="flex flex-col gap-1">
                 <span className="text-4xl font-black italic">100%</span>
-                <span className="text-[10px] text-green-500 font-bold tracking-[0.3em] uppercase">
+                <span className="text-[10px] text-green-500 font-bold uppercase">
                   Natural
                 </span>
               </div>
               <div className="w-px h-16 bg-white/10" />
               <div className="flex flex-col gap-1">
                 <span className="text-4xl font-black italic">BPM</span>
-                <span className="text-[10px] text-green-500 font-bold tracking-[0.3em] uppercase">
+                <span className="text-[10px] text-green-500 font-bold uppercase">
                   Certified
                 </span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
+          {/* CONTENEDOR DE IMAGEN FIJA PARA TRAZABILIDAD */}
           <motion.div
-            initial={{ x: 100, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: false }}
-            className="md:w-1/2 w-full aspect-square bg-white/5 border border-white/10 rounded-[4rem] flex items-center justify-center relative overflow-hidden"
+            className="md:w-1/2 w-full aspect-square bg-white/5 border border-white/10 rounded-[4rem] flex items-center justify-center relative overflow-hidden group shadow-2xl"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
           >
-            <Globe size={180} className="text-white/5" />
+            {/* Imagen de Fondo (Ruta fija para todos los productos) */}
+            <motion.img
+              src="/images/g1.jpeg"
+              alt="Origen Perú"
+              className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700"
+            />
+
+            {/* Elemento Visual Central */}
+            <div className="relative z-10 p-8 bg-black/40 backdrop-blur-xl rounded-full border border-white/10">
+              <Globe size={100} className="text-green-500" />
+            </div>
+
+            {/* Efecto de Brillo Ambiental */}
             <motion.div
-              animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className={`absolute inset-0 ${product.accent} blur-[100px]`}
+              animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+              transition={{ duration: 5, repeat: Infinity }}
+              className="absolute inset-0 bg-green-500 blur-[120px]"
             />
           </motion.div>
         </div>
