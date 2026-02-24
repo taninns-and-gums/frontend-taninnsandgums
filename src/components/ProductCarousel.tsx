@@ -34,7 +34,8 @@ const products = [
       de: "Hochviskoses Verdickungs- und Stabilisierungsmittel für die Lebensmittelindustrie.",
       zh: "适用于全球食品工业的高粘度增稠剂和稳定剂。",
     },
-    gradient: "from-green-900 via-green-800 to-emerald-950",
+    bgImage: "/images/p2.webp", // Asegúrate de tener estas imágenes en /public/images/
+    gradient: "from-green-950/90 via-green-900/70 to-emerald-950/90",
     accent: "rgba(34, 197, 94, 0.4)",
     icon: <Beaker size={28} />,
   },
@@ -58,7 +59,8 @@ const products = [
       de: "Premium-Extrakt für Luxusledergerbung und Antioxidationsanwendungen.",
       zh: "用于奢侈皮革制革和抗氧化应用的优质提取物。",
     },
-    gradient: "from-amber-900 via-stone-800 to-orange-950",
+    bgImage: "/images/g3.webp",
+    gradient: "from-amber-950/90 via-stone-900/70 to-orange-950/90",
     accent: "rgba(245, 158, 11, 0.4)",
     icon: <Leaf size={28} />,
   },
@@ -82,7 +84,8 @@ const products = [
       de: "Nährstoffkonzentrat reich an Aminosäuren für Tiernahrung.",
       zh: "富含氨基酸的营养浓缩物，适用于宠物食品和动物营养。",
     },
-    gradient: "from-emerald-900 via-teal-800 to-slate-950",
+    bgImage: "/images/g1.jpeg",
+    gradient: "from-emerald-950/90 via-teal-900/70 to-slate-950/90",
     accent: "rgba(16, 185, 129, 0.4)",
     icon: <Zap size={28} />,
   },
@@ -91,7 +94,7 @@ const products = [
 const TRANSITION_DURATION = 8000;
 
 export default function HomePage() {
-  const { lang } = useLang(); // 'es', 'en', 'de', 'zh'
+  const { lang } = useLang();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -111,7 +114,7 @@ export default function HomePage() {
     if (!isMounted) return;
     const timer = setInterval(() => changeStep(1), TRANSITION_DURATION);
     return () => clearInterval(timer);
-  }, [index, isMounted]);
+  }, [index, isMounted, direction]); // Añadido direction para estabilidad
 
   if (!isMounted) return <div className="h-screen w-full bg-black" />;
 
@@ -124,21 +127,34 @@ export default function HomePage() {
   };
 
   return (
-    <main className="relative h-screen w-full bg-black overflow-hidden font-sans">
-      {/* 1. FONDO Y PARTÍCULAS */}
+    <main className="relative h-screen w-full bg-red overflow-hidden font-sans">
+      {/* 1. FONDO CON IMAGEN Y OVERLAY DINÁMICO [cite: 77, 78] */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
-            className={`absolute inset-0 bg-linear-to-br ${currentProduct.gradient}`}
-          />
+            className="absolute inset-0"
+          >
+            {/* Imagen Real de Fondo */}
+            <img
+              src={currentProduct.bgImage}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            {/* Gradiente de marca para legibilidad  */}
+            <div
+              className={`absolute inset-0 bg-linear-to-br ${currentProduct.gradient} mix-blend-multiply`}
+            />
+            <div className="absolute inset-0 bg-black/10" />
+          </motion.div>
         </AnimatePresence>
 
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Partículas Sutiles [cite: 78, 79] */}
+        <div className="absolute inset-0 pointer-events-none z-10">
           {[...Array(15)].map((_, i) => (
             <motion.div
               key={i}
@@ -151,11 +167,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 2. CONTENIDO ADAPTATIVO */}
-      <div className="absolute inset-0 z-10 flex flex-col overflow-y-auto md:overflow-hidden">
+      {/* 2. CONTENIDO ADAPTATIVO (Protección iPhone SE) [cite: 82, 83] */}
+      <div className="absolute inset-0 z-20 flex flex-col overflow-y-auto md:overflow-hidden">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.section
-            key={`${index}-${lang}`} // Reinicia si cambia producto o idioma
+            key={`${index}-${lang}`}
             custom={direction}
             initial={{ x: direction > 0 ? "100%" : "-100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -222,7 +238,7 @@ export default function HomePage() {
         </AnimatePresence>
       </div>
 
-      {/* 3. NAVEGACIÓN CON PROGRESS SEGMENTADA */}
+      {/* 3. NAVEGACIÓN CON PROGRESS SEGMENTADA [cite: 93, 94, 95] */}
       <div className="absolute bottom-10 left-0 w-full flex justify-center px-6 z-50">
         <div className="flex items-center gap-6 p-2 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl">
           <button
